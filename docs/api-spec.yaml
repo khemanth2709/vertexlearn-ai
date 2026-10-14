@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: Vertexon LMS-AI Core Platform API
+  description: Complete RESTful API specifications for Vertexon Learning Management & AI Tutor Platform
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: Production API Gateway Endpoint
+
+paths:
+  /auth/register:
+    post:
+      summary: Register learner account
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [full_name, email, password]
+              properties:
+                full_name: { type: string, example: "Ananya Sharma" }
+                email: { type: string, format: email, example: "ananya@example.com" }
+                password: { type: string, format: password, example: "SecurePass123" }
+      responses:
+        '201':
+          description: User registered successfully
+
+  /auth/login:
+    post:
+      summary: Returns access and refresh token
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200':
+          description: Authentication successful
+
+  /courses:
+    get:
+      summary: List, filter and search course catalog
+      tags: [Courses]
+      parameters:
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: difficulty
+          in: query
+          schema: { type: string, enum: [beginner, intermediate, advanced] }
+        - name: q
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: List of published courses
+
+  /ai/chat/sessions:
+    post:
+      summary: Start a chat session scoped to a course
+      tags: [AI Tutor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [course_id]
+              properties:
+                course_id: { type: string, format: uuid }
+      responses:
+        '201':
+          description: Session created

@@ -1,0 +1,30 @@
+<svg width="400" height="90" viewBox="0 0 400 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded Emblem Container -->
+  <rect x="5" y="5" width="80" height="80" rx="18" fill="#0F172A" stroke="#1E293B" stroke-width="2"/>
+  
+  <!-- Orbiting ring -->
+  <ellipse cx="45" cy="46" rx="32" ry="12" transform="rotate(-25 45 46)" stroke="#06B6D4" stroke-width="2.5" stroke-dasharray="6 3"/>
+  
+  <!-- Faceted V -->
+  <path d="M22 32 L39 68 L45 68 L32 32 Z" fill="#2563EB"/>
+  <path d="M68 32 L51 68 L45 68 L58 32 Z" fill="#4F46E5"/>
+  <path d="M45 42 L38 62 L52 62 Z" fill="#06B6D4"/>
+  
+  <!-- Learner core -->
+  <circle cx="45" cy="35" r="5" fill="#F8FAFC"/>
+  
+  <!-- Mortarboard cap -->
+  <path d="M45 16 L68 24 L45 31 L22 24 Z" fill="#E2E8F0"/>
+  <path d="M31 26 L31 34 C31 38 59 38 59 34 L59 26 Z" fill="#0284C7"/>
+  <path d="M64 25 L70 33 L67 34 L62 27 Z" fill="#F59E0B"/>
+  <circle cx="68.5" cy="34" r="2" fill="#F59E0B"/>
+  
+  <!-- Sparkle star -->
+  <path d="M70 14 Q70 19 75 19 Q70 19 70 24 Q70 19 65 19 Q70 19 70 14 Z" fill="#F59E0B"/>
+  
+  <!-- Wordmark -->
+  <text x="105" y="48" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="34" fill="#0F172A">Vertex<tspan fill="#0284C7">Learn</tspan><tspan fill="#4F46E5" font-weight="900" dx="4">AI</tspan></text>
+  
+  <!-- Subtitle -->
+  <text x="106" y="68" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="11" fill="#64748B" letter-spacing="2">INTELLIGENT LMS PLATFORM</text>
+</svg>

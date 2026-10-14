@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # Primary PostgreSQL with pgvector extension
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: vertexon-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-lms_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d lms_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching, BullMQ, Celery & rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: vertexon-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO (S3 Compatible Object Storage)
+  minio:
+    image: minio/minio:RELEASE.2024-03-05T04-48-44Z
+    container_name: vertexon-minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  # Node.js Core LMS Service
+  core-lms-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vertexon-core-lms
+    environment:
+      PORT: 5000
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-postgres_dev_password}@postgres:5432/lms_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-supersecretjwtkey_prod_32bytes}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-supersecretrefreshjwtkey_prod_32bytes}
+      AI_SERVICE_URL: http://ai-service:8000
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Python AI Tutor Service
+  ai-tutor-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: vertexon-ai-tutor
+    environment:
+      PORT: 8000
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-postgres_dev_password}@postgres:5432/lms_db
+      REDIS_URL: redis://redis:6379
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # NGINX Reverse Proxy & Gateway
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: vertexon-nginx-gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - core-lms-service
+      - ai-tutor-service
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

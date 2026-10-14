@@ -1,0 +1,6 @@
+{
+  "name": "VertexLearn AI – Intelligent Learning Management System with AI Tutor",
+  "description": "VertexLearn AI – Intelligent Learning Management System with AI Tutor. Enterprise LMS featuring role-based access, automated grading, attendance tracking, compliance certification, and real-time analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

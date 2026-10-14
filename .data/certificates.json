@@ -1,0 +1,16 @@
+[
+  {
+    "certificateId": "VXAI-FE-2026-00412",
+    "userId": "usr_stu_1791984755232",
+    "userName": "Kandula Hemanth",
+    "courseId": "c_frontend",
+    "courseTitle": "Frontend Development",
+    "issueDate": "2026-10-14",
+    "completionDate": "2026-10-14",
+    "instructorName": "Dr. Elena Vance",
+    "directorName": "Dr. Priya Sharma",
+    "status": "VALID & ACCREDITED",
+    "verificationHash": "SHA256-8F4C2A1E90BD3347",
+    "createdAt": "2026-10-14T10:00:00.000Z"
+  }
+]
